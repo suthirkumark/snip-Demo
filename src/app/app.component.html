@@ -1,35 +1,40 @@
-<main class="container">
-  <h1>Snip</h1>
-  <p class="subline">Shorten links with a tiny API at http://localhost:3000</p>
+<div class="hero-glow" aria-hidden="true"></div>
 
-  <form class="row" (submit)="submitLink($event)">
+<main class="container">
+  <header class="hero">
+    <h1 class="hero-title">Snip</h1>
+    <p class="hero-subline">Shorten links with a tiny API at http://localhost:3000</p>
+  </header>
+
+  <form class="row input-shell" (submit)="submitLink($event)">
     <input
       type="url"
       name="url"
+      class="url-input"
       placeholder="https://example.com"
       [value]="urlInput()"
       (input)="onUrlInput($event)"
       [disabled]="submitting()"
       required
     />
-    <button type="submit" [disabled]="submitting()">
+    <button type="submit" class="submit-btn" [disabled]="submitting()">
       {{ submitting() ? 'Saving...' : 'Shorten' }}
     </button>
   </form>
 
   @if (createdLink(); as created) {
-    <p class="message success">
+    <p class="message success status-chip">
       Short link:
       <a [href]="created.shortUrl" target="_blank" rel="noopener">{{ created.shortUrl }}</a>
     </p>
   }
 
   @if (errorMessage()) {
-    <p class="message error">{{ errorMessage() }}</p>
+    <p class="message error status-chip">{{ errorMessage() }}</p>
   }
 
-  <section class="table-wrap">
-    <h2>All links</h2>
+  <section class="table-wrap card">
+    <h2 class="card-title">All links</h2>
 
     @if (loading()) {
       <p class="hint">Loading...</p>
