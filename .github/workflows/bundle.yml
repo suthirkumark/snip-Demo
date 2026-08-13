@@ -1,0 +1,37 @@
+name: Build bundle
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+  # No push trigger by design:
+  # This file exists only on main, and push workflows run from the pushed branch,
+  # so backend/frontend/cli branch pushes would not execute this workflow anyway.
+
+permissions:
+  contents: write
+
+jobs:
+  build-bundle:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main with submodules
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Configure git identity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Build and push bundle
+        run: node scripts/build-bundle.mjs --push
