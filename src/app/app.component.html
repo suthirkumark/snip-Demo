@@ -1,0 +1,63 @@
+<main class="container">
+  <h1>Snip</h1>
+  <p class="subline">Shorten links with a tiny API at http://localhost:3000</p>
+
+  <form class="row" (submit)="submitLink($event)">
+    <input
+      type="url"
+      name="url"
+      placeholder="https://example.com"
+      [value]="urlInput()"
+      (input)="onUrlInput($event)"
+      [disabled]="submitting()"
+      required
+    />
+    <button type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'Saving...' : 'Shorten' }}
+    </button>
+  </form>
+
+  @if (createdLink(); as created) {
+    <p class="message success">
+      Short link:
+      <a [href]="created.shortUrl" target="_blank" rel="noopener">{{ created.shortUrl }}</a>
+    </p>
+  }
+
+  @if (errorMessage()) {
+    <p class="message error">{{ errorMessage() }}</p>
+  }
+
+  <section class="table-wrap">
+    <h2>All links</h2>
+
+    @if (loading()) {
+      <p class="hint">Loading...</p>
+    } @else if (links().length === 0) {
+      <p class="hint">No links yet.</p>
+    } @else {
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Original URL</th>
+            <th>Hits</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (link of links(); track link.code) {
+            <tr>
+              <td>
+                <a [href]="link.shortUrl" target="_blank" rel="noopener">{{ link.code }}</a>
+              </td>
+              <td>
+                <a [href]="link.url" target="_blank" rel="noopener">{{ link.url }}</a>
+              </td>
+              <td>{{ link.hits }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </section>
+</main>
