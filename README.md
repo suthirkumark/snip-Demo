@@ -78,3 +78,20 @@ git add backend
 git commit -m "Bump backend submodule"
 git push
 ```
+
+## Generated bundle branch
+
+`bundle/` is generated release output, not hand-edited source.
+
+Build it from `main`:
+
+```bash
+node scripts/build-bundle.mjs
+```
+
+Run again to confirm idempotent no-op behavior when nothing changed.
+Push generated bundle plus main pointer bump:
+
+```bash
+node scripts/build-bundle.mjs --push
+```
