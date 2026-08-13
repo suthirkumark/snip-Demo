@@ -169,12 +169,13 @@ async function main() {
 
   if (bundleCommitted) {
     console.log('Bundle changes committed.');
-    if (shouldPush) {
-      runIn(bundleDir, 'git', ['push', 'origin', 'HEAD:bundle']);
-      console.log('Pushed bundle branch.');
-    }
   } else {
     console.log('Bundle unchanged; nothing to commit.');
+  }
+
+  if (shouldPush) {
+    runIn(bundleDir, 'git', ['push', 'origin', 'HEAD:bundle']);
+    console.log('Pushed bundle branch.');
   }
 
   run('git', ['add', 'bundle']);
@@ -182,12 +183,13 @@ async function main() {
 
   if (mainCommitted) {
     console.log('Main submodule pointer updated.');
-    if (shouldPush) {
-      run('git', ['push']);
-      console.log('Pushed main branch.');
-    }
   } else {
     console.log('Main unchanged; no submodule pointer bump required.');
+  }
+
+  if (shouldPush) {
+    run('git', ['push']);
+    console.log('Pushed main branch.');
   }
 
   if (!bundleCommitted && !mainCommitted) {
